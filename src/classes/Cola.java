@@ -32,7 +32,8 @@ public class Cola {
         this.size = 0;
     }
 
-    public void encolar(Nodo nuevo) { //queue
+    public void encolar(Vehiculo carro) { //queue
+        Nodo nuevo = new Nodo(carro);
         if (this.isEmpty()) {
             head = tail = nuevo;
         } else {
@@ -52,29 +53,39 @@ public class Cola {
             size--;
         }
     }
-
-    public String print() {
-        if (!this.isEmpty()) {
-            String printCola = "";
-            for (int i = 0; i < size; i++) {
-                Nodo actual = head;
-                this.desencolar();
-                printCola += actual.getElement() + ",";
-                this.encolar(actual);
-            }
-            return printCola;
-        }
-        return null;
+    
+    public Vehiculo dispatch(){
+        Vehiculo elemento = process();
+        desencolar();
+        return elemento;
     }
     
-    public void reverse(){
-        if (!this.isEmpty()) {
-            Nodo nodo = this.head;
-            this.desencolar();
-            this.reverse();
-            this.encolar(nodo);
-        }
+    public Vehiculo process(){
+        return getHead().getElement();
     }
+
+//    public String print() {
+//        if (!this.isEmpty()) {
+//            String printCola = "";
+//            for (int i = 0; i < size; i++) {
+//                Nodo actual = head;
+//                this.desencolar();
+//                printCola += actual.getElement() + ",";
+//                this.encolar(actual);
+//            }
+//            return printCola;
+//        }
+//        return null;
+//    }
+    
+//    public void reverse(){
+//        if (!this.isEmpty()) {
+//            Nodo nodo = this.head;
+//            this.desencolar();
+//            this.reverse();
+//            this.encolar(nodo);
+//        }
+//    }
 
     public Nodo getHead() {
         return head;

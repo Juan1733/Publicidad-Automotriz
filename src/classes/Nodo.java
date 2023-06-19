@@ -10,9 +10,9 @@ package classes;
  */
 public class Nodo {
     private Nodo next;
-    private Object element;
+    private Vehiculo element;
     
-    public Nodo(Object elemento){
+    public Nodo(Vehiculo elemento){
         this.next = null;
         this.element = elemento;
     }
@@ -34,14 +34,14 @@ public class Nodo {
     /**
      * @return the element
      */
-    public Object getElement() {
+    public Vehiculo getElement() {
         return element;
     }
 
     /**
      * @param element the element to set
      */
-    public void setElement(Object element) {
+    public void setElement(Vehiculo element) {
         this.element = element;
     }
     

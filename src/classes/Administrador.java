@@ -91,6 +91,22 @@ public class Administrador extends Thread {
         }
     }
     
+        private void desencolarRefuerzoVehiculo(Cola refuerzo, Cola cola1, Cola cola2, Cola cola3) {
+        if (refuerzo.isEmpty()) {
+            return;
+        }
+
+        int result = porcentaje.nextInt(100);
+        if (result <= 40) {
+            Vehiculo vehiculo = refuerzo.dispatch();
+            vehiculo.setPrioridad(1);
+//            this.returnChapterToQueue(chapter, queue1, queue2, queue3);
+        } else {
+            Vehiculo vehiculo = refuerzo.dispatch();
+            refuerzo.encolar(vehiculo);
+        }
+    }
+    
     public void setCounter(int counter) {
         this.counter = counter;
     }
