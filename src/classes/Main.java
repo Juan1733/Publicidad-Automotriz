@@ -4,12 +4,14 @@
  */
 package classes;
 
+import java.util.concurrent.Semaphore;
+
 /**
  *
  * @author Juan
  */
 public class Main {
-
+    public static Semaphore mutex = new Semaphore(1);
     /**
      * @param args the command line arguments
      */
