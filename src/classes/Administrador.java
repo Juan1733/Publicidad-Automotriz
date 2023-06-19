@@ -5,104 +5,93 @@
 package classes;
 
 import java.util.Random;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author mannith
  */
 public class Administrador extends Thread {
-//    private InteligenciaArtificial inteligenciaArtificial;
-//    private Cola colaBugattiNivel1;
-//    private Cola colaBugattiNivel2;
-//    private Cola colaBugattiNivel3;
-//    private Cola colaLamborghiniNivel1;
-//    private Cola colaLamborghiniNivel2;
-//    private Cola colaLamborghiniNivel3;
-//    private Random random;
-//
-//    public Administrador(InteligenciaArtificial inteligenciaArtificial,
-//                         Cola colaBugattiNivel1, Cola colaBugattiNivel2, Cola colaBugattiNivel3,
-//                         Cola colaLamborghiniNivel1, Cola colaLamborghiniNivel2, Cola colaLamborghiniNivel3) {
-//        this.inteligenciaArtificial = inteligenciaArtificial;
-//        this.colaBugattiNivel1 = colaBugattiNivel1;
-//        this.colaBugattiNivel2 = colaBugattiNivel2;
-//        this.colaBugattiNivel3 = colaBugattiNivel3;
-//        this.colaLamborghiniNivel1 = colaLamborghiniNivel1;
-//        this.colaLamborghiniNivel2 = colaLamborghiniNivel2;
-//        this.colaLamborghiniNivel3 = colaLamborghiniNivel3;
-//        this.random = new Random();
-//    }
-//
-//    @Override
-//    public void run() {
-//        while (true) {
-//            // Esperar a que la inteligencia artificial termine de revisar un vehículo
-//            inteligenciaArtificial.esperar();
-//
-//            // Actualizar las colas y agregar un nuevo vehículo con una probabilidad del 80%
-//            actualizarColas();
-//
-//            // Indicar a la inteligencia artificial que puede comenzar a trabajar con los vehículos seleccionados
-//            inteligenciaArtificial.empezar();
+    int counter = 0;
+    boolean running = true;
+    
+    public InteligenciaArtificial iA;
+    public Semaphore mutex;
+    
+    public Cola lamboColaNivel1;
+    public Cola lamboColaNivel2;
+    public Cola lamboColaNivel3;
+    public Cola bugattiColaNivel1;
+    public Cola bugattiColaNivel2;
+    public Cola bugattiColaNivel3;
+    public Cola lamboRefuerzo;
+    public Cola bugattiRefuerzo;
+    
+    final Random porcentaje = new Random();
+    
+    public Administrador(){
+        creacionColas();
+        this.mutex = Main.mutex;
+//        for (int i = 0; i < 20; i++) {
+//            this.addVehiculo("lambo");
+//            this.addVehiculo("bugatti");
 //        }
-//    }
-//
-//    private void actualizarColas() {
-//        if (debeAgregarVehiculo()) {
-//            agregarNuevoVehiculo(colaBugattiNivel1, colaBugattiNivel2, colaBugattiNivel3);
-//            agregarNuevoVehiculo(colaLamborghiniNivel1, colaLamborghiniNivel2, colaLamborghiniNivel3);
-//        }
-//    }
-//
-//    private boolean debeAgregarVehiculo() {
-//        return random.nextDouble() < 0.8;
-//    }
-//
-//    private void agregarNuevoVehiculo(Cola colaNivel1, Cola colaNivel2, Cola colaNivel3) {
-//        int prioridad = seleccionarPrioridad();
-//        Vehiculo vehiculo = crearNuevoVehiculo(prioridad);
-//        encolarVehiculo(vehiculo, colaNivel1, colaNivel2, colaNivel3);
-//        System.out.println("Nuevo vehículo agregado a la cola: " + vehiculo);
-//    }
-//
-//    private int seleccionarPrioridad() {
-//        int prioridad = random.nextInt(3) + 1;
-//        return prioridad;
-//    }
-//
-//    private Vehiculo crearNuevoVehiculo(int prioridad) {
-//        int id = generarIdUnico();
-//        String marca = seleccionarMarcaAleatoria();
-//        // Resto de la lógica para crear un nuevo vehículo
-//        return new Vehiculo(id, marca, prioridad, 0, 0, 0, 0);
-//    }
-//
-//    private void encolarVehiculo(Vehiculo vehiculo, Cola colaNivel1, Cola colaNivel2, Cola colaNivel3) {
-//        switch (vehiculo.getPrioridad()) {
-//            case 1:
-//                colaNivel1.encolar(new Nodo(vehiculo));
-//                break;
-//            case 2:
-//                colaNivel2.encolar(new Nodo(vehiculo));
-//                break;
-//            case 3:
-//                colaNivel3.encolar(new Nodo(vehiculo));
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-//
-//    private int generarIdUnico() {
-//        // Lógica para generar un ID único para cada vehículo
-//        // Puedes implementar tu propia lógica aquí, por ejemplo, utilizando un contador incremental o un UUID
-//        return UUID.randomUUID().hashCode();
-//    }
-//
-//    private String seleccionarMarcaAleatoria() {
-//        // Lógica para seleccionar una marca aleatoria (Bugatti o Lamborghini)
-//        String[] marcas = {"Bugatti", "Lamborghini"};
-//        int indiceAleatorio = random.nextInt(marcas.length);
-//        return marcas[indiceAleatorio];
-//    }
+//        this.iA = Main.iA;
+        try {
+            this.mutex.acquire();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.start();
+//        iA.start();
+    }
+
+    private void creacionColas() {
+        this.bugattiColaNivel1 = new Cola(); 
+        this.bugattiColaNivel2 = new Cola(); 
+        this.bugattiColaNivel3 = new Cola(); 
+        this.lamboColaNivel1 = new Cola();
+        this.lamboColaNivel2 = new Cola();
+        this.lamboColaNivel3 = new Cola();
+        this.lamboRefuerzo = new Cola();
+        this.bugattiRefuerzo = new Cola();
+    }
+    
+    @Override
+    public void run(){
+        try {
+            while(this.running){
+                this.mutex.acquire();
+                this.addVehiculo("lambo");
+                this.mutex.release();
+                Thread.sleep(500);
+                this.mutex.acquire();
+            }
+            
+        } catch (InterruptedException e){
+            Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+    
+    private void addVehiculo(String marca) {
+        int result = porcentaje.nextInt(100);
+        if (result <= 80) {
+            if(this.counter >= 2){
+                if(marca.equals("lambo")){
+                    System.out.println("es lambo y entro en el 80% por lo que se anade un carro a alguna cola");
+                }else{
+                    System.out.println("es bugatti y se anade un carro a alguna cola");
+                }
+                this.setCounter(0);
+            }
+            
+            this.setCounter(this.counter + 1);
+        }
+    }
+    
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
 }
