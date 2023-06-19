@@ -16,7 +16,7 @@ public class Cola {
     private Nodo tail;
     private int size;
 
-    public void Cola() {
+    public Cola() {
         this.head = null;
         this.tail = null;
         this.size = 0;
