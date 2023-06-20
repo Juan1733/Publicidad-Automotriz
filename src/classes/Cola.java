@@ -70,7 +70,7 @@ public class Cola {
             for (int i = 0; i < size; i++) {
                 Nodo actual = head;
                 this.desencolar();
-                printCola += actual.getElement() + ",";
+                printCola += actual.getElement().getMarca() + actual.getElement().getId() + ", ";
                 this.encolar(actual.getElement());
             }
             return printCola;
