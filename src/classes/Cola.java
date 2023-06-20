@@ -64,19 +64,19 @@ public class Cola {
         return getHead().getElement();
     }
 
-//    public String print() {
-//        if (!this.isEmpty()) {
-//            String printCola = "";
-//            for (int i = 0; i < size; i++) {
-//                Nodo actual = head;
-//                this.desencolar();
-//                printCola += actual.getElement() + ",";
-//                this.encolar(actual);
-//            }
-//            return printCola;
-//        }
-//        return null;
-//    }
+    public String print() {
+        if (!this.isEmpty()) {
+            String printCola = "";
+            for (int i = 0; i < size; i++) {
+                Nodo actual = head;
+                this.desencolar();
+                printCola += actual.getElement() + ",";
+                this.encolar(actual.getElement());
+            }
+            return printCola;
+        }
+        return null;
+    }
     
 //    public void reverse(){
 //        if (!this.isEmpty()) {
