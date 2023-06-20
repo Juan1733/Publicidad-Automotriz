@@ -23,7 +23,8 @@ public class InteligenciaArtificial extends Thread {
     Random random = new Random();
     public Semaphore mutex;
     
-    public String[] ganadores = new String[100];
+    public int[] winners = new int[500];
+    private int winnersPointer = 0;
     public int lamboWins = 0;
     public int bgWins = 0;
     
@@ -39,22 +40,53 @@ public class InteligenciaArtificial extends Thread {
     public void run() {
         try {
             while (true) {   
-                int auxTime = simulationTime;
+                long auxTime = simulationTime;
                 this.mutex.acquire();
                 
                 if (this.carroLambo != null && this.carroBg != null){
                     // Decidiendo
+                    System.out.println("estoy decidiendo");
                     //tomar un numero random para determinar ganador. 0=lambo, 1=bugatti
                     int num = random.nextInt(2);
                     
-                    Vehiculo winner; 
-                    if(num == 0){
-                        winner = this.carroLambo;
-                    }else if(num == 1){
-                        winner = this.carroBg;
-                    }
+                    Vehiculo winner = (num == 0) ? this.carroLambo : this.carroBg; 
+//                    if(num == 0){ // gano lambo
+//                        winner = this.carroLambo;
+//                    }else if(num == 1){ //gano bugatti
+//                        winner = this.carroBg;
+//                    }
+                    Thread.sleep((long) (auxTime * 0.3));
                     
-                }                                                
+                    // entero para determinar resultado de la simulacion
+                    int decision = random.nextInt(100);
+                    
+                    if(decision <= 40){ //hay ganador
+                        System.out.println("Gano alguien");
+                        winners[winnersPointer] = winner.getId();
+                        winnersPointer++;
+                        
+                        if(num == 0){ // es lambo
+                            this.lamboWins++;
+                        }else if(num == 1){ //es bugatti
+                            this.bgWins++;
+                        }
+                        Thread.sleep((long) (auxTime * 0.5));
+                        
+                    }else if(decision <= 67){ //hay empate
+                        System.out.println("hubo empate");
+                        Thread.sleep((long) (auxTime * 0.5));
+                        this.administrador.regresarVehiculoCola1(carroLambo);
+                        this.administrador.regresarVehiculoCola1(carroBg);                        
+                    }else{ //van a refuerzo
+                        System.out.println("nos vamos a refuerzo");
+                        Thread.sleep((long) (auxTime * 0.5));
+                        //enviar a la cola de refuerzo
+                    }                    
+                    System.out.println("Esperando");
+                }
+                Thread.sleep((long) (auxTime * 0.2));
+                this.mutex.release();
+                Thread.sleep(500);                
             }                                   
         } catch (InterruptedException ex) {
             Logger.getLogger(InteligenciaArtificial.class.getName()).log(Level.SEVERE, null, ex);
