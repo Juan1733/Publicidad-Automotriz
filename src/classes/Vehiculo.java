@@ -10,6 +10,7 @@ package classes;
  */
 public class Vehiculo {
     private int id;
+    private String idString;
     private String marca;
     private int prioridad;
     private double calidadCarroceria;
