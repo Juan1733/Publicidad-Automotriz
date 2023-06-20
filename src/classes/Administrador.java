@@ -34,17 +34,19 @@ public class Administrador extends Thread {
     public Administrador(){
         creacionColas();
         this.mutex = Main.mutex;
-//        for (int i = 0; i < 20; i++) {
+//        for (int i = 0; i < 10; i++) {
 //            this.addVehiculo("lambo");
+//            System.out.println("cola numero 1 de lambo:" + this.lamboColaNivel1.print());
 //            this.addVehiculo("bugatti");
+//            System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print());
 //        }
 //        this.iA = Main.iA;
-        try {
-            this.mutex.acquire();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.start();
+//        try {
+////            this.mutex.acquire();
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        //this.start();
 //        iA.start();
     }
 
@@ -65,9 +67,12 @@ public class Administrador extends Thread {
             while(this.running){
                 this.mutex.acquire();
                 this.addVehiculo("lambo");
+                System.out.println("cola numero 1 de lambo: " + this.lamboColaNivel1.print());
+                this.addVehiculo("bugatti");
+                System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print());
                 this.mutex.release();
                 Thread.sleep(500);
-                this.mutex.acquire();
+//                this.mutex.acquire();
             }
             
         } catch (InterruptedException e){
@@ -77,21 +82,59 @@ public class Administrador extends Thread {
     
     private void addVehiculo(String marca) {
         int result = porcentaje.nextInt(100);
+        System.out.println("porcentaje para add vehiculo: "+ result +"%");
         if (result <= 80) {
             if(this.counter >= 2){
                 if(marca.equals("lambo")){
-                    System.out.println("es lambo y entro en el 80% por lo que se anade un carro a alguna cola");
-                }else{
-                    System.out.println("es bugatti y se anade un carro a alguna cola");
+                    System.out.println("es lambo y entro en el 80% por lo que se anade un carro a la cola 1");
+                    Vehiculo lambo = this.crearVehiculo(result, marca, 1, MIN_PRIORITY, MIN_PRIORITY, counter, counter);
+                    System.out.println(lambo);
+                    this.regresarVehiculoCola1(lambo);
+                    
+                }else if(marca.equals("bugatti")){
+                    System.out.println("es bugatti y se anade un carro a la cola 1");
+                    Vehiculo bugatti = this.crearVehiculo(result, marca, 1, MIN_PRIORITY, MIN_PRIORITY, counter, counter);
+                    System.out.println(bugatti);
+                    this.regresarVehiculoCola1(bugatti);
                 }
                 this.setCounter(0);
             }
-            
-            this.setCounter(this.counter + 1);
+        }
+        this.setCounter(this.counter + 1);
+    }
+    
+        private void desencolarRefuerzoVehiculo(Cola refuerzo) {
+        if (refuerzo.isEmpty()) {
+            return;
+        }
+
+        int result = porcentaje.nextInt(100);
+        if (result <= 40) {
+            Vehiculo vehiculo = refuerzo.dispatch();
+            vehiculo.setPrioridad(1);
+            this.regresarVehiculoCola1(vehiculo);
+        } else {
+            Vehiculo vehiculo = refuerzo.dispatch();
+            refuerzo.encolar(vehiculo);
         }
     }
     
     public void setCounter(int counter) {
         this.counter = counter;
     }
+    
+    public Vehiculo crearVehiculo(int id, String marca, int prioridad, double calidadCarroceria, double calidadChasis, double calidadMotor, double calidadRueda){
+        return new Vehiculo(id, marca, prioridad, calidadCarroceria, calidadChasis, calidadMotor, calidadRueda);
+        
+    }
+    private void regresarVehiculoCola1(Vehiculo marca){
+//        System.out.println("holaaaaa");
+        if(marca.getMarca().equals("lambo")){
+            this.lamboColaNivel1.encolar(marca);
+        }else if(marca.getMarca().equals("bugatti")){
+            System.out.println(marca + "entro a regresarvehiculo");
+            this.bugattiColaNivel1.encolar(marca);
+        }
+    }
+    
 }
