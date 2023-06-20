@@ -72,11 +72,22 @@ public class Administrador extends Thread {
         try {
             while(this.running){
                 this.mutex.acquire();
+                
+                this.desencolarRefuerzoVehiculo(lamboRefuerzo);
+                
                 this.addVehiculo("lambo");
 //                System.out.println("cola numero 1 de lambo: " + this.lamboColaNivel1.print());
                 this.addVehiculo("bugatti");
 //                System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print());
+
+                this.sumarContadorCambiarPrioridad(lamboColaNivel2);
+                this.sumarContadorCambiarPrioridad(lamboColaNivel3);
+                this.sumarContadorCambiarPrioridad(bugattiColaNivel2);
+                this.sumarContadorCambiarPrioridad(bugattiColaNivel3);
+
+
                 this.mutex.release();
+                this.setCounter(this.counter + 1);
                 Thread.sleep(500);
 //                this.mutex.acquire();
             }
@@ -106,7 +117,6 @@ public class Administrador extends Thread {
                 this.setCounter(0);
             }
         }
-        this.setCounter(this.counter + 1);
     }
     
     private void createVehiculosIniciales(String marca){
@@ -167,6 +177,55 @@ public class Administrador extends Thread {
         }else if(marca.getMarca().equals("bugatti")){
 //            System.out.println(marca + "entro a regresarvehiculo");
             this.bugattiColaNivel1.encolar(marca);
+        }
+    }
+    
+    private void sumarContadorCambiarPrioridad(Cola cola){
+        int longitud = cola.getSize();
+        int i = 0;
+        
+        while(i<longitud){
+            Vehiculo vehiculo = cola.dispatch();
+            vehiculo.setContadorRondas(vehiculo.getContadorRondas() + 1);
+            
+            
+            if(vehiculo.getContadorRondas()>=8){
+                if (vehiculo.getPrioridad()>1){
+                    vehiculo.setPrioridad(vehiculo.getPrioridad() - 1);
+                    if(vehiculo.getMarca().equals("lambo")){
+                        if(vehiculo.getPrioridad() == 1){
+                            this.lamboColaNivel1.encolar(vehiculo);
+                        }else if(vehiculo.getPrioridad() == 2){
+                            this.lamboColaNivel2.encolar(vehiculo);
+                        }else if(vehiculo.getPrioridad() == 3){
+                            this.lamboColaNivel3.encolar(vehiculo);
+                        }
+                    }else if(vehiculo.getMarca().equals("bugatti")){
+                        if(vehiculo.getPrioridad() == 1){
+                            this.bugattiColaNivel1.encolar(vehiculo);
+                        }else if(vehiculo.getPrioridad() == 2){
+                            this.bugattiColaNivel2.encolar(vehiculo);
+                        }else if(vehiculo.getPrioridad() == 3){
+                            this.bugattiColaNivel3.encolar(vehiculo);
+                        }
+                    }
+                }else{
+                    cola.encolar(vehiculo);
+                }
+                vehiculo.setContadorRondas(1);
+            }else{
+                cola.encolar(vehiculo);
+            }
+            i++;
+        }
+    }
+    
+    public void enviarCarrosColaRefuerzo(Vehiculo lambito, Vehiculo bugga){
+        if(lambito != null ){
+            this.lamboRefuerzo.encolar(lambito);
+        }
+        if(bugga != null){
+            this.bugattiRefuerzo.encolar(bugga);
         }
     }
     
