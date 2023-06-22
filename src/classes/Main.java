@@ -4,6 +4,7 @@
  */
 package classes;
 
+import interfaz.GlobalUi;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -24,6 +25,8 @@ public class Main {
         
         sistemaOperativo.start();
         ia.start();
+        
+        GlobalUi.openMainPage();
     }
     
 }

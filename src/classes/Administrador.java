@@ -4,6 +4,8 @@
  */
 package classes;
 
+import interfaz.ColaUi;
+import interfaz.GlobalUi;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
@@ -29,6 +31,17 @@ public class Administrador extends Thread {
     public Cola lamboRefuerzo;
     public Cola bugattiRefuerzo;
     
+    // colas de la interfaz
+    public ColaUi colaLamboUi1;
+    public ColaUi colaLamboUi2;
+    public ColaUi colaLamboUi3;
+    public ColaUi colaLamboUiRef;
+    
+    public ColaUi colaBgUi1;
+    public ColaUi colaBgUi2;
+    public ColaUi colaBgUi3;
+    public ColaUi colaBgUiRef;
+    
     final Random porcentaje = new Random();
     
     public Administrador(){
@@ -40,6 +53,7 @@ public class Administrador extends Thread {
             this.createVehiculosIniciales("bugatti");
 //            System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print());
         }
+        updateColasUi();
         System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print());
         System.out.println("cola numero 2 de bugatti: " + this.bugattiColaNivel2.print());
         System.out.println("cola numero 3 de bugatti: " + this.bugattiColaNivel3.print());
@@ -65,6 +79,16 @@ public class Administrador extends Thread {
         this.lamboColaNivel3 = new Cola();
         this.lamboRefuerzo = new Cola();
         this.bugattiRefuerzo = new Cola();
+        
+        this.colaLamboUi1 = GlobalUi.getMainPage().getColaLamboUi1();
+        this.colaLamboUi2 = GlobalUi.getMainPage().getColaLamboUi2();
+        this.colaLamboUi3 = GlobalUi.getMainPage().getColaLamboUi3();
+        this.colaLamboUiRef = GlobalUi.getMainPage().getColaLamboUiRef();
+        
+        this.colaBgUi1 = GlobalUi.getMainPage().getColaBgUi1();
+        this.colaBgUi2 = GlobalUi.getMainPage().getColaBgUi2();
+        this.colaBgUi3 = GlobalUi.getMainPage().getColaBgUi3();
+        this.colaBgUiRef = GlobalUi.getMainPage().getColaBgUiRef();
     }
     
     @Override
@@ -72,19 +96,25 @@ public class Administrador extends Thread {
         try {
             while(this.running){
                 this.mutex.acquire();
+                this.setCounter(this.counter + 1);
                 
                 this.desencolarRefuerzoVehiculo(lamboRefuerzo);
                 this.desencolarRefuerzoVehiculo(bugattiRefuerzo);
                 
-                this.addVehiculo("lambo");
+                int result = porcentaje.nextInt(100);
+
+                this.addVehiculo("lambo", result);
 //                System.out.println("cola numero 1 de lambo: " + this.lamboColaNivel1.print());
-                this.addVehiculo("bugatti");
-//                System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print());               
+                this.addVehiculo("bugatti", result);
+//                System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print());   
+           
 
                 this.sumarContadorCambiarPrioridad(lamboColaNivel2);
                 this.sumarContadorCambiarPrioridad(lamboColaNivel3);
                 this.sumarContadorCambiarPrioridad(bugattiColaNivel2);
                 this.sumarContadorCambiarPrioridad(bugattiColaNivel3);
+                
+                updateColasUi();
 
                 // obtener los carros
                 Vehiculo lambo = this.getVehiculoColas(lamboColaNivel1, lamboColaNivel2, lamboColaNivel3);
@@ -101,9 +131,9 @@ public class Administrador extends Thread {
                 if(bugatti != null){
                     bugatti.setContadorRondas(0);
                 }
-
+                
+                updateColasUi();
                 this.mutex.release();
-                this.setCounter(this.counter + 1);
                 Thread.sleep(500);
 //                this.mutex.acquire();
             }
@@ -113,8 +143,8 @@ public class Administrador extends Thread {
         }
     }
     
-    private void addVehiculo(String marca) { // todo agregar vehiculo a su cola de prioridad
-        int result = porcentaje.nextInt(100);
+    private void addVehiculo(String marca, int result) { // todo agregar vehiculo a su cola de prioridad
+//        int result = porcentaje.nextInt(100);
 //        System.out.println("porcentaje para add vehiculo: "+ result +"%");
         if (result <= 80) {
             if(this.counter >= 2){
@@ -254,6 +284,39 @@ public class Administrador extends Thread {
             return cola3.dispatch();
         }
         return null;
+    }
+    
+    public void updateColasUi(){
+        this.colaLamboUi1.updateUiQueue(lamboColaNivel1);
+        this.colaLamboUi2.updateUiQueue(lamboColaNivel2);
+        this.colaLamboUi3.updateUiQueue(lamboColaNivel3);
+        this.colaLamboUiRef.updateUiQueue(lamboRefuerzo);
+        
+        this.colaBgUi1.updateUiQueue(bugattiColaNivel1);
+        this.colaBgUi2.updateUiQueue(bugattiColaNivel2);
+        this.colaBgUi3.updateUiQueue(bugattiColaNivel3);
+        this.colaBgUiRef.updateUiQueue(bugattiRefuerzo);
+    }
+    
+    public void regresarCarrosAColas(Vehiculo lambo, Vehiculo bugatti) {
+        if (lambo != null) {
+            if(lambo.getPrioridad() == 1){
+                this.lamboColaNivel1.encolar(lambo);
+            }else if(lambo.getPrioridad() == 2){
+                this.lamboColaNivel2.encolar(lambo);
+            }else if(lambo.getPrioridad() == 3){
+                this.lamboColaNivel3.encolar(lambo);
+            }
+        }
+        if (bugatti != null) {
+            if(bugatti.getPrioridad() == 1){
+                this.bugattiColaNivel1.encolar(bugatti);
+            }else if(bugatti.getPrioridad() == 2){
+                this.bugattiColaNivel2.encolar(bugatti);
+            }else if(bugatti.getPrioridad() == 3){
+                this.bugattiColaNivel3.encolar(bugatti);
+            }
+        }
     }
     
 }
