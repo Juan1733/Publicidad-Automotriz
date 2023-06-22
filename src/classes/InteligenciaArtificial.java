@@ -29,11 +29,11 @@ public class InteligenciaArtificial extends Thread {
     public int bgWins = 0;
     
 
-    public InteligenciaArtificial(Cola colaBugatti, Cola colaLamborghini) {
-        this.administrador = Main.sistemaOperativo;
+    public InteligenciaArtificial() {
+//        this.administrador = Main.sistemaOperativo;
         this.mutex = Main.mutex;
         // 10 segundos por defecto
-        this.simulationTime = 10 * 1000;
+        this.simulationTime = 4 * 1000;
     }
 
     @Override
@@ -63,13 +63,18 @@ public class InteligenciaArtificial extends Thread {
                     if(decision <= 40){ //hay ganador
                         System.out.println("Gano alguien");
                         winners[winnersPointer] = winner.getId();
-                        winnersPointer++;
+                        if(winnersPointer < winners.length){
+                            winnersPointer++;
+                        }                 
                         
                         if(num == 0){ // es lambo
                             this.lamboWins++;
-                        }else if(num == 1){ //es bugatti
+                        }else if(num == 1){ //es bugatti                            
                             this.bgWins++;
                         }
+                        
+                        System.out.println("Lambo ganadas: " + lamboWins);
+                        System.out.println("Bugatti ganadas: " + bgWins);
                         Thread.sleep((long) (auxTime * 0.5));
                         
                     }else if(decision <= 67){ //hay empate
@@ -81,6 +86,7 @@ public class InteligenciaArtificial extends Thread {
                         System.out.println("nos vamos a refuerzo");
                         Thread.sleep((long) (auxTime * 0.5));
                         //enviar a la cola de refuerzo
+                        this.administrador.enviarCarrosColaRefuerzo(this.carroLambo, this.carroBg);
                     }                    
                     System.out.println("Esperando");
                 }
@@ -92,6 +98,21 @@ public class InteligenciaArtificial extends Thread {
             Logger.getLogger(InteligenciaArtificial.class.getName()).log(Level.SEVERE, null, ex);
         }
     }   
-
+    
+    public void setCarroLambo(Vehiculo nuevoLambo){
+        this.carroLambo = nuevoLambo;
+    }
+    
+    public void setCarroBugatti(Vehiculo nuevoBg){
+        this.carroBg = nuevoBg;
+    }
+    
+    public void setSimulationTime(int timeSec){
+        this.simulationTime = timeSec * 1000;
+    }
+    
+    public void setAdministrador(){
+        this.administrador = Main.sistemaOperativo;
+    }
 }   
 

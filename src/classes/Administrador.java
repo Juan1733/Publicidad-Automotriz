@@ -17,7 +17,7 @@ public class Administrador extends Thread {
     int counter = 0;
     boolean running = true;
     
-    public InteligenciaArtificial iA;
+    public InteligenciaArtificial ia;
     public Semaphore mutex;
     
     public Cola lamboColaNivel1;
@@ -46,7 +46,7 @@ public class Administrador extends Thread {
         System.out.println("cola numero 1 de Lambo: " + this.lamboColaNivel1.print());
         System.out.println("cola numero 2 de Lambo: " + this.lamboColaNivel2.print());
         System.out.println("cola numero 3 de Lambo: " + this.lamboColaNivel3.print());
-//        this.iA = Main.iA;
+        this.ia = Main.ia;
 //        try {
 ////            this.mutex.acquire();
 //        } catch (InterruptedException ex) {
@@ -74,17 +74,33 @@ public class Administrador extends Thread {
                 this.mutex.acquire();
                 
                 this.desencolarRefuerzoVehiculo(lamboRefuerzo);
+                this.desencolarRefuerzoVehiculo(bugattiRefuerzo);
                 
                 this.addVehiculo("lambo");
 //                System.out.println("cola numero 1 de lambo: " + this.lamboColaNivel1.print());
                 this.addVehiculo("bugatti");
-//                System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print());
+//                System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print());               
 
                 this.sumarContadorCambiarPrioridad(lamboColaNivel2);
                 this.sumarContadorCambiarPrioridad(lamboColaNivel3);
                 this.sumarContadorCambiarPrioridad(bugattiColaNivel2);
                 this.sumarContadorCambiarPrioridad(bugattiColaNivel3);
 
+                // obtener los carros
+                Vehiculo lambo = this.getVehiculoColas(lamboColaNivel1, lamboColaNivel2, lamboColaNivel3);
+                Vehiculo bugatti = this.getVehiculoColas(bugattiColaNivel1, bugattiColaNivel2, bugattiColaNivel3);
+                
+                // pasarle a la ia los carros
+                ia.setCarroLambo(lambo);
+                ia.setCarroBugatti(bugatti);
+                
+                // setear en 0 el contador de inanicion de cada carro
+                if(lambo != null){
+                    lambo.setContadorRondas(0);
+                }
+                if(bugatti != null){
+                    bugatti.setContadorRondas(0);
+                }
 
                 this.mutex.release();
                 this.setCounter(this.counter + 1);
@@ -97,7 +113,7 @@ public class Administrador extends Thread {
         }
     }
     
-    private void addVehiculo(String marca) {
+    private void addVehiculo(String marca) { // todo agregar vehiculo a su cola de prioridad
         int result = porcentaje.nextInt(100);
 //        System.out.println("porcentaje para add vehiculo: "+ result +"%");
         if (result <= 80) {
@@ -146,20 +162,20 @@ public class Administrador extends Thread {
         }
     }
     
-        private void desencolarRefuerzoVehiculo(Cola refuerzo) {
+    private void desencolarRefuerzoVehiculo(Cola refuerzo) {
         if (refuerzo.isEmpty()) {
             return;
-        }
-
-        int result = porcentaje.nextInt(100);
-        if (result <= 40) {
-            Vehiculo vehiculo = refuerzo.dispatch();
-            vehiculo.setPrioridad(1);
-            this.regresarVehiculoCola1(vehiculo);
-        } else {
-            Vehiculo vehiculo = refuerzo.dispatch();
-            refuerzo.encolar(vehiculo);
-        }
+        }else {
+            int result = porcentaje.nextInt(100);
+            if (result <= 40) {
+                Vehiculo vehiculo = refuerzo.dispatch();
+                vehiculo.setPrioridad(1);
+                this.regresarVehiculoCola1(vehiculo);
+            } else {
+                Vehiculo vehiculo = refuerzo.dispatch();
+                refuerzo.encolar(vehiculo);
+            }
+        }       
     }
     
     public void setCounter(int counter) {
@@ -186,8 +202,7 @@ public class Administrador extends Thread {
         
         while(i<longitud){
             Vehiculo vehiculo = cola.dispatch();
-            vehiculo.setContadorRondas(vehiculo.getContadorRondas() + 1);
-            
+            vehiculo.setContadorRondas(vehiculo.getContadorRondas() + 1);         
             
             if(vehiculo.getContadorRondas()>=8){
                 if (vehiculo.getPrioridad()>1){
@@ -227,6 +242,18 @@ public class Administrador extends Thread {
         if(bugga != null){
             this.bugattiRefuerzo.encolar(bugga);
         }
+    }
+    
+    private Vehiculo getVehiculoColas(Cola cola1, Cola cola2, Cola cola3) {
+        
+        if (!cola1.isEmpty()) {
+            return cola1.dispatch();
+        } else if (!cola2.isEmpty()) {
+            return cola2.dispatch();
+        } else if (!cola3.isEmpty()) {
+            return cola3.dispatch();
+        }
+        return null;
     }
     
 }
