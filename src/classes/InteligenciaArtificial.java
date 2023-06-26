@@ -24,7 +24,7 @@ public class InteligenciaArtificial extends Thread {
     Random random = new Random();
     public Semaphore mutex;
     
-    public int[] winners = new int[500];
+    public String[] winners = new String[500];
     private int winnersPointer = 0;
     public int lamboWins = 0;
     public int bgWins = 0;
@@ -68,7 +68,8 @@ public class InteligenciaArtificial extends Thread {
                     
                     if(decision <= 40){ //hay ganador
                         System.out.println("Gano alguien");
-                        winners[winnersPointer] = winner.getId();
+                        String car = num == 0 ? "lambo" : "bugatti";
+                        winners[winnersPointer] = car + "-" + Integer.toString(winner.getId());
                         if(winnersPointer < winners.length){
                             winnersPointer++;
                         }           
@@ -100,6 +101,8 @@ public class InteligenciaArtificial extends Thread {
                     }                    
                     System.out.println("Esperando");
                 }
+                this.administrador.updateColasUi();
+                System.out.println(this.administrador.bugattiColaNivel1.print());
                 Thread.sleep((long) (auxTime * 0.2));
                 this.mutex.release();
                 Thread.sleep(500);                
@@ -112,7 +115,7 @@ public class InteligenciaArtificial extends Thread {
     private String printWinners(){
         String text = "";
         for(int i = 0; i < winnersPointer; i++){
-            String value = Integer.toString(winners[i]);
+            String value = winners[i];
             text += value + ", ";
         }
         return text;

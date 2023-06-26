@@ -101,13 +101,15 @@ public class Administrador extends Thread {
                 this.desencolarRefuerzoVehiculo(lamboRefuerzo);
                 this.desencolarRefuerzoVehiculo(bugattiRefuerzo);
                 
-                int result = porcentaje.nextInt(100);
+                if(this.counter >= 2){
+                    int result = porcentaje.nextInt(100);
 
-                this.addVehiculo("lambo", result);
-//                System.out.println("cola numero 1 de lambo: " + this.lamboColaNivel1.print());
-                this.addVehiculo("bugatti", result);
-//                System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print());   
-           
+                    this.addVehiculo("lambo", result);
+    //                System.out.println("cola numero 1 de lambo: " + this.lamboColaNivel1.print());
+                    this.addVehiculo("bugatti", result);
+    //                System.out.println("cola numero 1 de bugatti: " + this.bugattiColaNivel1.print()); 
+                    this.setCounter(0);
+                }   
 
                 this.sumarContadorCambiarPrioridad(lamboColaNivel2);
                 this.sumarContadorCambiarPrioridad(lamboColaNivel3);
@@ -147,20 +149,17 @@ public class Administrador extends Thread {
 //        int result = porcentaje.nextInt(100);
 //        System.out.println("porcentaje para add vehiculo: "+ result +"%");
         if (result <= 80) {
-            if(this.counter >= 2){
-                if(marca.equals("lambo")){
+            if(marca.equals("lambo")){
 //                    System.out.println("es lambo y entro en el 80% por lo que se anade un carro a la cola 1");
-                    Vehiculo lambo = this.crearVehiculo(result, marca, 1, MIN_PRIORITY, MIN_PRIORITY, counter, counter);
+                Vehiculo lambo = this.crearVehiculo(result, marca, 1, MIN_PRIORITY, MIN_PRIORITY, counter, counter);
 //                    System.out.println(lambo);
-                    this.regresarVehiculoCola1(lambo);
-                    
-                }else if(marca.equals("bugatti")){
+                this.regresarVehiculoCola1(lambo);
+
+            }else if(marca.equals("bugatti")){
 //                    System.out.println("es bugatti y se anade un carro a la cola 1");
-                    Vehiculo bugatti = this.crearVehiculo(result, marca, 1, MIN_PRIORITY, MIN_PRIORITY, counter, counter);
+                Vehiculo bugatti = this.crearVehiculo(result, marca, 1, MIN_PRIORITY, MIN_PRIORITY, counter, counter);
 //                    System.out.println(bugatti);
-                    this.regresarVehiculoCola1(bugatti);
-                }
-                this.setCounter(0);
+                this.regresarVehiculoCola1(bugatti);
             }
         }
     }
