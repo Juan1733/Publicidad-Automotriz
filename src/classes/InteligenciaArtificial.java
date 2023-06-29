@@ -8,6 +8,7 @@ package classes;
  *
  * @author mannith
  */
+import interfaz.ColaUi;
 import interfaz.GlobalUi;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
@@ -25,6 +26,7 @@ public class InteligenciaArtificial extends Thread {
     public Semaphore mutex;
     
     public String[] winners = new String[500];
+
     private int winnersPointer = 0;
     public int lamboWins = 0;
     public int bgWins = 0;
@@ -46,7 +48,7 @@ public class InteligenciaArtificial extends Thread {
                 this.mutex.acquire();
                 
                 if(this.carroLambo == null || this.carroBg == null){
-                    this.administrador.regresarCarrosAColas(carroLambo, carroBg);
+                    Main.sistemaOperativo.regresarCarrosAColas(carroLambo, carroBg);
                     Thread.sleep(auxTime);
                     
                 } else{
@@ -98,14 +100,14 @@ public class InteligenciaArtificial extends Thread {
                         System.out.println("hubo empate");
                         GlobalUi.getMainPage().getStatusLabel().setText("Hubo Empate");
                         Thread.sleep((long) (auxTime * 0.5));
-                        this.administrador.regresarVehiculoCola1(carroLambo);
-                        this.administrador.regresarVehiculoCola1(carroBg);                        
+                        Main.sistemaOperativo.regresarVehiculoCola1(carroLambo);
+                        Main.sistemaOperativo.regresarVehiculoCola1(carroBg);                        
                     }else{ //van a refuerzo
                         System.out.println("nos vamos a refuerzo");
                         GlobalUi.getMainPage().getStatusLabel().setText("Vamos a refuerzo");
                         Thread.sleep((long) (auxTime * 0.5));
                         //enviar a la cola de refuerzo
-                        this.administrador.enviarCarrosColaRefuerzo(this.carroLambo, this.carroBg);
+                        Main.sistemaOperativo.enviarCarrosColaRefuerzo(this.carroLambo, this.carroBg);
                     }                    
                     System.out.println("Esperando");
                     GlobalUi.getMainPage().getStatusLabel().setText("Esperando");
