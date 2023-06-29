@@ -153,43 +153,49 @@ public class Administrador extends Thread {
     private void addVehiculo(String marca, int result) { // todo agregar vehiculo a su cola de prioridad
 //        int result = porcentaje.nextInt(100);
 //        System.out.println("porcentaje para add vehiculo: "+ result +"%");
+        int prioridadFinal = calidadFinal();
         if (result <= 80) {
             if(marca.equals("lambo")){
 //                    System.out.println("es lambo y entro en el 80% por lo que se anade un carro a la cola 1");
-                Vehiculo lambo = this.crearVehiculo(result, marca, 1, MIN_PRIORITY, MIN_PRIORITY, counter, counter);
+                Vehiculo lambo = this.crearVehiculo(result, marca, prioridadFinal, prioridadFinal);
 //                    System.out.println(lambo);
-                this.regresarVehiculoCola1(lambo);
+                this.ponerVehiculoEnSuCola(lambo);
 
             }else if(marca.equals("bugatti")){
 //                    System.out.println("es bugatti y se anade un carro a la cola 1");
-                Vehiculo bugatti = this.crearVehiculo(result, marca, 1, MIN_PRIORITY, MIN_PRIORITY, counter, counter);
+                Vehiculo bugatti = this.crearVehiculo(result, marca, prioridadFinal, prioridadFinal);
 //                    System.out.println(bugatti);
-                this.regresarVehiculoCola1(bugatti);
+                this.ponerVehiculoEnSuCola(bugatti);
             }
         }
     }
     
     private void createVehiculosIniciales(String marca){
-        int prioridadRandom = porcentaje.nextInt(3);
+        int prioridadFinal = calidadFinal();
+        
         int result = porcentaje.nextInt(100);
+        
         if(marca.equals("lambo")){
-            Vehiculo lambo = this.crearVehiculo(result, marca, prioridadRandom, MIN_PRIORITY, MIN_PRIORITY, counter, counter);
-            if(lambo.getPrioridad() == 0){
+            
+            Vehiculo lambo = this.crearVehiculo(result, marca, prioridadFinal, prioridadFinal);
+            
+            
+            if(lambo.getPrioridad() == 1){
                 this.lamboColaNivel1.encolar(lambo);
-            }else if(lambo.getPrioridad() == 1){
-                this.lamboColaNivel2.encolar(lambo);
             }else if(lambo.getPrioridad() == 2){
+                this.lamboColaNivel2.encolar(lambo);
+            }else if(lambo.getPrioridad() == 3){
                 this.lamboColaNivel3.encolar(lambo);
             }                
         }else if(marca.equals("bugatti")){ 
-            Vehiculo bugatti = this.crearVehiculo(result, marca, prioridadRandom, MIN_PRIORITY, MIN_PRIORITY, counter, counter);
-            if(bugatti.getPrioridad() == 0){
+            Vehiculo bugatti = this.crearVehiculo(result, marca, prioridadFinal, prioridadFinal);
+            if(bugatti.getPrioridad() == 1){
                 this.bugattiColaNivel1.encolar(bugatti);
 //                System.out.println(this.bugattiColaNivel1.print());
-            }else if(bugatti.getPrioridad() == 1){
+            }else if(bugatti.getPrioridad() == 2){
                 this.bugattiColaNivel2.encolar(bugatti);
 //                System.out.println(this.bugattiColaNivel2.print());
-            }else if(bugatti.getPrioridad() == 2){
+            }else if(bugatti.getPrioridad() == 3){
                 this.bugattiColaNivel3.encolar(bugatti);
 //                System.out.println(this.bugattiColaNivel3.print());
             }                
@@ -216,10 +222,31 @@ public class Administrador extends Thread {
         this.counter = counter;
     }
     
-    public Vehiculo crearVehiculo(int id, String marca, int prioridad, double calidadCarroceria, double calidadChasis, double calidadMotor, double calidadRueda){
-        return new Vehiculo(id, marca, prioridad, calidadCarroceria, calidadChasis, calidadMotor, calidadRueda);
+    public Vehiculo crearVehiculo(int id, String marca, int prioridad, int calidadFinal){
+        return new Vehiculo(id, marca, prioridad, calidadFinal);
         
     }
+    
+    public void ponerVehiculoEnSuCola(Vehiculo carro){
+        if(carro.getMarca().equals("lambo")){
+            if(carro.getPrioridad() == 1){
+                this.lamboColaNivel1.encolar(carro);
+            }else if(carro.getPrioridad() == 2){
+                this.lamboColaNivel2.encolar(carro);
+            }else{
+                this.lamboColaNivel3.encolar(carro);
+            }
+        }else if(carro.getMarca().equals("bugatti")){
+            if(carro.getPrioridad() == 1){
+                this.bugattiColaNivel1.encolar(carro);
+            }else if(carro.getPrioridad() == 2){
+                this.bugattiColaNivel2.encolar(carro);
+            }else{
+                this.bugattiColaNivel3.encolar(carro);
+            }
+        }
+    }
+    
     public void regresarVehiculoCola1(Vehiculo marca){
 //        System.out.println("holaaaaa");
         if(marca.getMarca().equals("lambo")){
@@ -321,6 +348,41 @@ public class Administrador extends Thread {
                 this.bugattiColaNivel3.encolar(bugatti);
             }
         }
+    }
+    
+    public int calidadFinal(){
+        int calidadCarroceria = 0;
+        int prioridadRandom = porcentaje.nextInt(100);
+        if(prioridadRandom <= 60){
+            calidadCarroceria = 1;
+        }
+        int calidadChasis = 0;
+        prioridadRandom = porcentaje.nextInt(100);
+        if (prioridadRandom <= 70){
+            calidadChasis = 1;
+        }
+        
+        int calidadMotor = 0;
+        prioridadRandom = porcentaje.nextInt(100);
+        if (prioridadRandom <= 50){
+            calidadMotor = 1;
+        }
+        
+        int calidadRueda = 0;
+        prioridadRandom = porcentaje.nextInt(100);
+        if (prioridadRandom <= 40){
+            calidadRueda = 1;
+        }
+        int prioridadFinal = 0;
+        int sumaCalidad = calidadCarroceria + calidadRueda + calidadMotor + calidadChasis;
+        if(sumaCalidad >= 3){
+            prioridadFinal = 1;
+        }else if(sumaCalidad == 2){
+            prioridadFinal = 2;
+        }else{
+            prioridadFinal = 3;
+        }
+        return prioridadFinal;
     }
     
 }

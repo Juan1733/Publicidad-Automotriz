@@ -13,20 +13,14 @@ public class Vehiculo {
     private String idString;
     private String marca;
     private int prioridad;
-    private double calidadCarroceria;
-    private double calidadChasis;
-    private double calidadMotor;
-    private double calidadRueda;
+    private int calidadFinal;
     private int contadorRondas;
 
-    public Vehiculo(int id, String marca, int prioridad, double calidadCarroceria, double calidadChasis, double calidadMotor, double calidadRueda) {
+    public Vehiculo(int id, String marca, int prioridad, int calidadFinal) {
         this.id = id;
         this.marca = marca;
         this.prioridad = prioridad;
-        this.calidadCarroceria = calidadCarroceria;
-        this.calidadChasis = calidadChasis;
-        this.calidadMotor = calidadMotor;
-        this.calidadRueda = calidadRueda;
+        this.calidadFinal = calidadFinal;
         this.contadorRondas = 0;
     }
 
@@ -56,36 +50,12 @@ public class Vehiculo {
         this.prioridad = prioridad;
     }
 
-    public double getCalidadCarroceria() {
-        return calidadCarroceria;
+    public double getCalidadFinal() {
+        return calidadFinal;
     }
 
-    public void setCalidadCarroceria(double calidadCarroceria) {
-        this.calidadCarroceria = calidadCarroceria;
-    }
-
-    public double getCalidadChasis() {
-        return calidadChasis;
-    }
-
-    public void setCalidadChasis(double calidadChasis) {
-        this.calidadChasis = calidadChasis;
-    }
-
-    public double getCalidadMotor() {
-        return calidadMotor;
-    }
-
-    public void setCalidadMotor(double calidadMotor) {
-        this.calidadMotor = calidadMotor;
-    }
-
-    public double getCalidadRueda() {
-        return calidadRueda;
-    }
-
-    public void setCalidadRueda(double calidadRueda) {
-        this.calidadRueda = calidadRueda;
+    public void setCalidadFinal(int calidadFinal) {
+        this.calidadFinal = calidadFinal;
     }
 
     public int getContadorRondas() {
@@ -101,10 +71,7 @@ public class Vehiculo {
                 "id=" + id +
                 ", marca='" + marca + '\'' +
                 ", prioridad=" + prioridad +
-                ", calidadCarroceria=" + calidadCarroceria +
-                ", calidadChasis=" + calidadChasis +
-                ", calidadMotor=" + calidadMotor +
-                ", calidadRueda=" + calidadRueda +
+                ", calidadFinal=" + calidadFinal +
                 ", contadorRondas=" + contadorRondas +
                 '}';
     }

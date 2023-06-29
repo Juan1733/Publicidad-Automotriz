@@ -151,5 +151,23 @@ public class InteligenciaArtificial extends Thread {
     public void setAdministrador(){
         this.administrador = Main.sistemaOperativo;
     }
+    
+    public void decideWinner(){
+        if (this.carroBg.getCalidadFinal() < this.carroLambo.getCalidadFinal()){
+            Vehiculo winner = this.carroBg;
+            this.bgWins++;
+            GlobalUi.getMainPage().getBugattiWinsLabel().setText(Integer.toString(bgWins));
+            GlobalUi.getMainPage().getBugattiWinnerLabel().setText("Ganador!");
+            
+        }else if(this.carroLambo.getCalidadFinal() < this.carroBg.getCalidadFinal()){
+            Vehiculo winner = this.carroLambo;
+            this.lamboWins++;
+            //sumar contador de carreras ganadas
+            GlobalUi.getMainPage().getLamboWinsLabel().setText(Integer.toString(lamboWins));
+            //decir que gano
+            GlobalUi.getMainPage().getLamboWinnerLabel().setText("Ganador!");
+        }
+    }
+    
 }   
 
