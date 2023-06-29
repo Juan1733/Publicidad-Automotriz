@@ -25,10 +25,8 @@ public class InteligenciaArtificial extends Thread {
     Random random = new Random();
     public Semaphore mutex;
     
-//    public Cola ganadores;
-//    public ColaUi colaganadores;
-    
-    public int[] winners = new int[500];
+    public String[] winners = new String[500];
+
     private int winnersPointer = 0;
     public int lamboWins = 0;
     public int bgWins = 0;
@@ -56,6 +54,7 @@ public class InteligenciaArtificial extends Thread {
                 } else{
                     // Decidiendo
                     System.out.println("estoy decidiendo");
+                    GlobalUi.getMainPage().getStatusLabel().setText("Decidiendo");
                     //tomar un numero random para determinar ganador. 0=lambo, 1=bugatti
                     int num = random.nextInt(2);
                     
@@ -72,7 +71,9 @@ public class InteligenciaArtificial extends Thread {
                     
                     if(decision <= 40){ //hay ganador
                         System.out.println("Gano alguien");
-                        winners[winnersPointer] = winner.getId();
+                        GlobalUi.getMainPage().getStatusLabel().setText("Hay un ganador");
+                        String car = num == 0 ? "lambo" : "bugatti";
+                        winners[winnersPointer] = car + "-" + Integer.toString(winner.getId());
                         if(winnersPointer < winners.length){
                             winnersPointer++;
                         }           
@@ -80,11 +81,15 @@ public class InteligenciaArtificial extends Thread {
                         GlobalUi.getMainPage().getWinnersLabel().setText(printWinners());
                         if(num == 0){ // es lambo
                             this.lamboWins++;
+                            //sumar contador de carreras ganadas
                             GlobalUi.getMainPage().getLamboWinsLabel().setText(Integer.toString(lamboWins));
+                            //decir que gano
+                            GlobalUi.getMainPage().getLamboWinnerLabel().setText("Ganador!");
                             
                         }else if(num == 1){ //es bugatti                            
                             this.bgWins++;
                             GlobalUi.getMainPage().getBugattiWinsLabel().setText(Integer.toString(bgWins));
+                            GlobalUi.getMainPage().getBugattiWinnerLabel().setText("Ganador!");
                         }
                         
                         System.out.println("Lambo ganadas: " + lamboWins);
@@ -93,18 +98,27 @@ public class InteligenciaArtificial extends Thread {
                         
                     }else if(decision <= 67){ //hay empate
                         System.out.println("hubo empate");
+                        GlobalUi.getMainPage().getStatusLabel().setText("Hubo Empate");
                         Thread.sleep((long) (auxTime * 0.5));
                         Main.sistemaOperativo.regresarVehiculoCola1(carroLambo);
                         Main.sistemaOperativo.regresarVehiculoCola1(carroBg);                        
                     }else{ //van a refuerzo
                         System.out.println("nos vamos a refuerzo");
+                        GlobalUi.getMainPage().getStatusLabel().setText("Vamos a refuerzo");
                         Thread.sleep((long) (auxTime * 0.5));
                         //enviar a la cola de refuerzo
                         Main.sistemaOperativo.enviarCarrosColaRefuerzo(this.carroLambo, this.carroBg);
                     }                    
                     System.out.println("Esperando");
+                    GlobalUi.getMainPage().getStatusLabel().setText("Esperando");
                 }
+                this.administrador.updateColasUi();
+                System.out.println(this.administrador.bugattiColaNivel1.print());
                 Thread.sleep((long) (auxTime * 0.2));
+                
+                GlobalUi.getMainPage().getLamboWinnerLabel().setText("");
+                GlobalUi.getMainPage().getBugattiWinnerLabel().setText("");
+                
                 this.mutex.release();
                 Thread.sleep(500);                
             }                                   
@@ -116,7 +130,7 @@ public class InteligenciaArtificial extends Thread {
     private String printWinners(){
         String text = "";
         for(int i = 0; i < winnersPointer; i++){
-            String value = Integer.toString(winners[i]);
+            String value = winners[i];
             text += value + ", ";
         }
         return text;

@@ -6,6 +6,7 @@ package interfaz;
 
 import classes.Main;
 import java.awt.Image;
+import java.util.Random;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -54,6 +55,14 @@ public class MainPage extends javax.swing.JFrame {
         logoBg = new javax.swing.JLabel();
         bgWinsLabel1 = new javax.swing.JLabel();
         racePanel = new javax.swing.JPanel();
+        uiLamboId = new javax.swing.JLabel();
+        uibugattiId = new javax.swing.JLabel();
+        statusLabel = new javax.swing.JLabel();
+        vs = new javax.swing.JLabel();
+        lamboCar = new javax.swing.JLabel();
+        bugattiCar = new javax.swing.JLabel();
+        lamboWinLabel = new javax.swing.JLabel();
+        bugattiWinLabel = new javax.swing.JLabel();
         sliderPane = new javax.swing.JPanel();
         timeSlider = new javax.swing.JSlider();
         jLabel3 = new javax.swing.JLabel();
@@ -67,14 +76,14 @@ public class MainPage extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel2.add(colaLamboUi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, -1, -1));
-        jPanel2.add(colaLamboUi2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
-        jPanel2.add(colaLamboUi3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, -1, -1));
-        jPanel2.add(colaLamboUiRef, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 520, -1, -1));
-        jPanel2.add(colaBgUi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 160, -1, -1));
-        jPanel2.add(colaBgUi2, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 280, -1, -1));
-        jPanel2.add(colaBgUi3, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 400, -1, -1));
-        jPanel2.add(colaBgUiRef, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 520, -1, -1));
+        jPanel2.add(colaLamboUi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+        jPanel2.add(colaLamboUi2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, -1, -1));
+        jPanel2.add(colaLamboUi3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, -1, -1));
+        jPanel2.add(colaLamboUiRef, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, -1, -1));
+        jPanel2.add(colaBgUi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 160, -1, -1));
+        jPanel2.add(colaBgUi2, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 280, -1, -1));
+        jPanel2.add(colaBgUi3, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 400, -1, -1));
+        jPanel2.add(colaBgUiRef, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 520, -1, -1));
         jPanel2.add(lights, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 220, 100));
 
         jPanel3.setBackground(new java.awt.Color(51, 51, 51));
@@ -93,7 +102,7 @@ public class MainPage extends javax.swing.JFrame {
         lamboWinsLabel.setText("0");
         jPanel3.add(lamboWinsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 50, 70, 30));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 310, 110));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 310, 110));
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -111,11 +120,45 @@ public class MainPage extends javax.swing.JFrame {
         bgWinsLabel1.setText("0");
         jPanel1.add(bgWinsLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, 70, 30));
 
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 30, 310, 110));
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 310, 110));
 
-        racePanel.setBackground(new java.awt.Color(51, 51, 51));
+        racePanel.setBackground(new java.awt.Color(153, 153, 153));
         racePanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel2.add(racePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 120, 420, 370));
+
+        uiLamboId.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        uiLamboId.setForeground(new java.awt.Color(0, 0, 0));
+        uiLamboId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        racePanel.add(uiLamboId, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 230, -1));
+
+        uibugattiId.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        uibugattiId.setForeground(new java.awt.Color(0, 0, 0));
+        uibugattiId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        racePanel.add(uibugattiId, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, 230, -1));
+
+        statusLabel.setBackground(new java.awt.Color(0, 0, 0));
+        statusLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        statusLabel.setForeground(new java.awt.Color(0, 0, 0));
+        statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        racePanel.add(statusLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 5, 490, 30));
+
+        vs.setBackground(new java.awt.Color(255, 255, 255));
+        racePanel.add(vs, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 40, 170, 130));
+        racePanel.add(lamboCar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 230, 140));
+        racePanel.add(bugattiCar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 170, 230, 140));
+
+        lamboWinLabel.setBackground(new java.awt.Color(0, 204, 51));
+        lamboWinLabel.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lamboWinLabel.setForeground(new java.awt.Color(0, 102, 0));
+        lamboWinLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        racePanel.add(lamboWinLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, 230, 20));
+
+        bugattiWinLabel.setBackground(new java.awt.Color(0, 204, 51));
+        bugattiWinLabel.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        bugattiWinLabel.setForeground(new java.awt.Color(0, 102, 0));
+        bugattiWinLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        racePanel.add(bugattiWinLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, 230, 20));
+
+        jPanel2.add(racePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 490, 370));
 
         sliderPane.setBackground(new java.awt.Color(153, 153, 153));
         sliderPane.setForeground(new java.awt.Color(255, 255, 255));
@@ -145,7 +188,7 @@ public class MainPage extends javax.swing.JFrame {
         jLabel3.setText("Seleccionar tiempo de simulacion");
         sliderPane.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 30));
 
-        jPanel2.add(sliderPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 620, 300, 90));
+        jPanel2.add(sliderPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 640, 300, 90));
 
         winnersPane.setBackground(new java.awt.Color(51, 51, 51));
         winnersPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -159,7 +202,7 @@ public class MainPage extends javax.swing.JFrame {
 
         winnersPane.add(winnersScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 390, 50));
 
-        jPanel2.add(winnersPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 510, 420, 90));
+        jPanel2.add(winnersPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 530, 420, 90));
 
         background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/fondo2.jpg"))); // NOI18N
         jPanel2.add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 750));
@@ -212,6 +255,8 @@ public class MainPage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel background;
     private javax.swing.JLabel bgWinsLabel1;
+    private javax.swing.JLabel bugattiCar;
+    private javax.swing.JLabel bugattiWinLabel;
     private interfaz.ColaUi colaBgUi1;
     private interfaz.ColaUi colaBgUi2;
     private interfaz.ColaUi colaBgUi3;
@@ -227,13 +272,19 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lamboCar;
+    private javax.swing.JLabel lamboWinLabel;
     private javax.swing.JLabel lamboWinsLabel;
     private javax.swing.JLabel lights;
     private javax.swing.JLabel logoBg;
     private javax.swing.JLabel logoLambo;
     private javax.swing.JPanel racePanel;
     private javax.swing.JPanel sliderPane;
+    private javax.swing.JLabel statusLabel;
     private javax.swing.JSlider timeSlider;
+    private javax.swing.JLabel uiLamboId;
+    private javax.swing.JLabel uibugattiId;
+    private javax.swing.JLabel vs;
     private javax.swing.JLabel winnersLabel;
     private javax.swing.JPanel winnersPane;
     private javax.swing.JScrollPane winnersScrollPane;
@@ -244,6 +295,20 @@ public class MainPage extends javax.swing.JFrame {
         setImageLabel(logoLambo, "src/imgs/logoLambo.png");
         setImageLabel(logoBg, "src/imgs/logoBg.png");
         setImageLabel(lights, "src/imgs/lights.jpg");
+        setImageLabel(vs, "src/imgs/vs.png");
+    }
+    
+    public void setCarsImgsUi(){
+        
+        Random r = new Random();
+        int numLambo = r.nextInt(4) + 1;
+        int numBg = r.nextInt(4) + 1;
+        
+        String picLambo = Integer.toString(numLambo);
+        String picBg = Integer.toString(numBg);
+        
+        setImageLabel(lamboCar, ("src/imgs/lambo"+ picLambo + ".png"));
+        setImageLabel(bugattiCar, ("src/imgs/bugatti" + picBg + ".png"));
     }
     
     private void setTitulosColas(){
@@ -264,6 +329,7 @@ public class MainPage extends javax.swing.JFrame {
         labelName.setIcon(icon);
         this.repaint();
     }
+    // set lambo and bugatti cars (images)
     
     public ColaUi getColaLamboUi1(){
         return this.colaLamboUi1;
@@ -303,4 +369,19 @@ public class MainPage extends javax.swing.JFrame {
         return this.bgWinsLabel1;
     }
     
+    public JLabel getUiLamboId(){
+        return this.uiLamboId;
+    }
+    public JLabel getUiBugattiId(){
+        return this.uibugattiId;
+    }
+    public JLabel getStatusLabel(){
+        return this.statusLabel;
+    }
+    public JLabel getLamboWinnerLabel(){
+        return this.lamboWinLabel;
+    }
+    public JLabel getBugattiWinnerLabel(){
+        return this.bugattiWinLabel;
+    }
 }
