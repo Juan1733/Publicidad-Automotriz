@@ -126,6 +126,11 @@ public class Administrador extends Thread {
                 ia.setCarroLambo(lambo);
                 ia.setCarroBugatti(bugatti);
                 
+                //actualizar ids y carros en interfaz
+                GlobalUi.getMainPage().getUiLamboId().setText(("lambo-" + lambo.getId()));
+                GlobalUi.getMainPage().getUiBugattiId().setText(("bugatti-" + bugatti.getId()));
+                GlobalUi.getMainPage().setCarsImgsUi();
+                
                 // setear en 0 el contador de inanicion de cada carro
                 if(lambo != null){
                     lambo.setContadorRondas(0);
