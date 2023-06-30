@@ -56,14 +56,10 @@ public class InteligenciaArtificial extends Thread {
                     System.out.println("estoy decidiendo");
                     GlobalUi.getMainPage().getStatusLabel().setText("Decidiendo");
                     //tomar un numero random para determinar ganador. 0=lambo, 1=bugatti
-                    int num = random.nextInt(2);
-                    
-                    Vehiculo winner = (num == 0) ? this.carroLambo : this.carroBg; 
-//                    if(num == 0){ // gano lambo
-//                        winner = this.carroLambo;
-//                    }else if(num == 1){ //gano bugatti
-//                        winner = this.carroBg;
-//                    }
+//                    int num = random.nextInt(2);
+//                    Vehiculo winner = (num == 0) ? this.carroLambo : this.carroBg;
+                    Vehiculo winner = this.decideWinner();
+
                     Thread.sleep((long) (auxTime * 0.3));
                     
                     // entero para determinar resultado de la simulacion
@@ -72,21 +68,21 @@ public class InteligenciaArtificial extends Thread {
                     if(decision <= 40){ //hay ganador
                         System.out.println("Gano alguien");
                         GlobalUi.getMainPage().getStatusLabel().setText("Hay un ganador");
-                        String car = num == 0 ? "lambo" : "bugatti";
+                        String car = winner.getMarca();
                         winners[winnersPointer] = car + "-" + Integer.toString(winner.getId());
                         if(winnersPointer < winners.length){
                             winnersPointer++;
                         }           
                         
                         GlobalUi.getMainPage().getWinnersLabel().setText(printWinners());
-                        if(num == 0){ // es lambo
+                        if(winner.getMarca().equals("lambo")){ // es lambo
                             this.lamboWins++;
                             //sumar contador de carreras ganadas
                             GlobalUi.getMainPage().getLamboWinsLabel().setText(Integer.toString(lamboWins));
                             //decir que gano
                             GlobalUi.getMainPage().getLamboWinnerLabel().setText("Ganador!");
                             
-                        }else if(num == 1){ //es bugatti                            
+                        }else if(winner.getMarca().equals("bugatti")){ //es bugatti                            
                             this.bgWins++;
                             GlobalUi.getMainPage().getBugattiWinsLabel().setText(Integer.toString(bgWins));
                             GlobalUi.getMainPage().getBugattiWinnerLabel().setText("Ganador!");
@@ -152,21 +148,42 @@ public class InteligenciaArtificial extends Thread {
         this.administrador = Main.sistemaOperativo;
     }
     
-    public void decideWinner(){
-        if (this.carroBg.getCalidadFinal() < this.carroLambo.getCalidadFinal()){
-            Vehiculo winner = this.carroBg;
-            this.bgWins++;
-            GlobalUi.getMainPage().getBugattiWinsLabel().setText(Integer.toString(bgWins));
-            GlobalUi.getMainPage().getBugattiWinnerLabel().setText("Ganador!");
+    public Vehiculo decideWinner(){
+        
+        Vehiculo winner = null;
+        
+        // si la diferencia de caballos de fuerza es <= 50, entonces gana el de mejor calidad, si es la misma, gana el que tenga mas caballos
+        if(Math.abs(carroLambo.getCaballosFuerza() - carroBg.getCaballosFuerza()) <= 50){
             
-        }else if(this.carroLambo.getCalidadFinal() < this.carroBg.getCalidadFinal()){
-            Vehiculo winner = this.carroLambo;
-            this.lamboWins++;
-            //sumar contador de carreras ganadas
-            GlobalUi.getMainPage().getLamboWinsLabel().setText(Integer.toString(lamboWins));
-            //decir que gano
-            GlobalUi.getMainPage().getLamboWinnerLabel().setText("Ganador!");
+            if (this.carroBg.getCalidadFinal() < this.carroLambo.getCalidadFinal()){
+                winner = this.carroBg; 
+            }else if(this.carroLambo.getCalidadFinal() < this.carroBg.getCalidadFinal()){
+                winner = this.carroLambo;
+            }else if(this.carroBg.getCalidadFinal() == this.carroLambo.getCalidadFinal()){ //misma calidad
+                winner = this.winnerByHP();
+            }
+            
+        }else { // la diferencia es mayor a 50 caballos, gana el que tenga mas caballos
+            winner = this.winnerByHP();
         }
+        
+        return winner;   
+    }
+    
+    public Vehiculo winnerByHP(){
+        Vehiculo winner = null;
+        
+        if(carroLambo.getCaballosFuerza() > carroBg.getCaballosFuerza()){
+            //lambo tiene mas HP
+            winner = this.carroLambo;
+        }else if (carroLambo.getCaballosFuerza() < carroBg.getCaballosFuerza()){
+            winner = this.carroBg;
+        }else{ // tienen los mismos caballos, se hace al azar
+            int num = random.nextInt(2);
+            winner = (num == 0) ? this.carroLambo : this.carroBg;
+        }
+        
+        return winner;
     }
     
 }   

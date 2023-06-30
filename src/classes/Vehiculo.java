@@ -4,6 +4,8 @@
  */
 package classes;
 
+import java.util.Random;
+
 /**
  *
  * @author mannith
@@ -15,6 +17,8 @@ public class Vehiculo {
     private int prioridad;
     private int calidadFinal;
     private int contadorRondas;
+    private int caballosFuerza;
+    private Random r = new Random();
 
     public Vehiculo(int id, String marca, int prioridad, int calidadFinal) {
         this.id = id;
@@ -22,12 +26,17 @@ public class Vehiculo {
         this.prioridad = prioridad;
         this.calidadFinal = calidadFinal;
         this.contadorRondas = 0;
+        this.caballosFuerza = r.nextInt(900 - 400) + 400;
     }
 
     // Getters y setters
 
     public int getId() {
         return id;
+    }
+    
+    public int getCaballosFuerza(){
+        return this.caballosFuerza;
     }
 
     public void setId(int id) {
