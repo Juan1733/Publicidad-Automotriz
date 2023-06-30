@@ -130,6 +130,11 @@ public class Administrador extends Thread {
                 GlobalUi.getMainPage().getUiLamboId().setText(("lambo-" + lambo.getId()));
                 GlobalUi.getMainPage().getUiBugattiId().setText(("bugatti-" + bugatti.getId()));
                 GlobalUi.getMainPage().setCarsImgsUi();
+                // actualizar HP y calidad en interfaz
+                GlobalUi.getMainPage().getCalidadLamboUi().setText(Integer.toString((int) lambo.getCalidadFinal()));
+                GlobalUi.getMainPage().getCalidadBgUi().setText(Integer.toString((int) bugatti.getCalidadFinal()));
+                GlobalUi.getMainPage().getLamboHP().setText(Integer.toString(lambo.getCaballosFuerza()));
+                GlobalUi.getMainPage().getBugattiHP().setText(Integer.toString(bugatti.getCaballosFuerza()));
                 
                 // setear en 0 el contador de inanicion de cada carro
                 if(lambo != null){

@@ -63,6 +63,14 @@ public class MainPage extends javax.swing.JFrame {
         bugattiCar = new javax.swing.JLabel();
         lamboWinLabel = new javax.swing.JLabel();
         bugattiWinLabel = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        calidadLamboUI = new javax.swing.JLabel();
+        lamboHP = new javax.swing.JLabel();
+        calidadBgUi = new javax.swing.JLabel();
+        bugattiHP = new javax.swing.JLabel();
         sliderPane = new javax.swing.JPanel();
         timeSlider = new javax.swing.JSlider();
         jLabel3 = new javax.swing.JLabel();
@@ -150,15 +158,47 @@ public class MainPage extends javax.swing.JFrame {
         lamboWinLabel.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         lamboWinLabel.setForeground(new java.awt.Color(0, 102, 0));
         lamboWinLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        racePanel.add(lamboWinLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, 230, 20));
+        racePanel.add(lamboWinLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 230, 20));
 
         bugattiWinLabel.setBackground(new java.awt.Color(0, 204, 51));
         bugattiWinLabel.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         bugattiWinLabel.setForeground(new java.awt.Color(0, 102, 0));
         bugattiWinLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        racePanel.add(bugattiWinLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, 230, 20));
+        racePanel.add(bugattiWinLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 340, 230, 20));
 
-        jPanel2.add(racePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 490, 370));
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("Calidad:");
+        racePanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, -1, -1));
+
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Calidad:");
+        racePanel.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 310, -1, -1));
+
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("HP:");
+        racePanel.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, -1, -1));
+
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("HP:");
+        racePanel.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 310, -1, -1));
+
+        calidadLamboUI.setForeground(new java.awt.Color(0, 0, 0));
+        calidadLamboUI.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        racePanel.add(calidadLamboUI, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 310, 60, -1));
+
+        lamboHP.setForeground(new java.awt.Color(0, 0, 0));
+        lamboHP.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        racePanel.add(lamboHP, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, 60, -1));
+
+        calidadBgUi.setForeground(new java.awt.Color(0, 0, 0));
+        calidadBgUi.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        racePanel.add(calidadBgUi, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 310, 50, -1));
+
+        bugattiHP.setForeground(new java.awt.Color(0, 0, 0));
+        bugattiHP.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        racePanel.add(bugattiHP, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 310, 60, -1));
+
+        jPanel2.add(racePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 490, 380));
 
         sliderPane.setBackground(new java.awt.Color(153, 153, 153));
         sliderPane.setForeground(new java.awt.Color(255, 255, 255));
@@ -256,7 +296,10 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel background;
     private javax.swing.JLabel bgWinsLabel1;
     private javax.swing.JLabel bugattiCar;
+    private javax.swing.JLabel bugattiHP;
     private javax.swing.JLabel bugattiWinLabel;
+    private javax.swing.JLabel calidadBgUi;
+    private javax.swing.JLabel calidadLamboUI;
     private interfaz.ColaUi colaBgUi1;
     private interfaz.ColaUi colaBgUi2;
     private interfaz.ColaUi colaBgUi3;
@@ -269,10 +312,15 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lamboCar;
+    private javax.swing.JLabel lamboHP;
     private javax.swing.JLabel lamboWinLabel;
     private javax.swing.JLabel lamboWinsLabel;
     private javax.swing.JLabel lights;
@@ -383,5 +431,18 @@ public class MainPage extends javax.swing.JFrame {
     }
     public JLabel getBugattiWinnerLabel(){
         return this.bugattiWinLabel;
+    }
+    
+    public JLabel getCalidadLamboUi(){
+        return this.calidadLamboUI;
+    }
+    public JLabel getCalidadBgUi(){
+        return this.calidadBgUi;
+    }
+    public JLabel getLamboHP(){
+        return this.lamboHP;
+    }
+    public JLabel getBugattiHP(){
+        return this.bugattiHP;
     }
 }
